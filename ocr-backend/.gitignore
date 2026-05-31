@@ -1,0 +1,18 @@
+# Dependencias
+node_modules/
+
+# Credenciales
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Compilacion
+dist/
+build/
+
+# Editor
+.vscode/
+.DS_Store
