@@ -1,19 +1,15 @@
 const express = require("express");
 const multer = require("multer");
 
-const {
-    extractText,
-} = require("../controllers/ocr.controller");
+const { extractText, } = require("../controllers/ocr.controller");
 
 const router = express.Router();
 
-const upload = multer({
-    dest: "uploads/",
-});
+const upload = multer({ dest: "uploads/"});
 
 router.post(
     "/extract",
-    upload.single("pdf"),
+    upload.single("image"),
     extractText
 );
 

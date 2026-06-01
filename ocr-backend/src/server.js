@@ -12,5 +12,5 @@ app.use(express.json());
 app.use("/api/ocr", ocrRoutes);
 
 app.listen(3000, () => {
-  console.log("Server running");
+  console.log("Server running: http://localhost:3000");
 });
