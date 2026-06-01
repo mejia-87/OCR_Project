@@ -11,37 +11,27 @@ type Props = {
   onPageReady?: () => void;
 };
 
-export default function PdfViewer({
-  file,
-  onOCRSelection,
-}: Props) {
+export default function PdfViewer({ file, onOCRSelection, }: Props) {
+
   const PDF_WIDTH = 1000;
 
   const [pageHeight, setPageHeight] = useState(0);
   const pdfContainerRef = useRef<HTMLDivElement>(null);
 
-  console.log("pageHeight:", pageHeight);
-
   return (
     <div className="flex justify-center">
-
       <div
         className="relative"
         ref={pdfContainerRef}
         id="pdf-container"
       >
-
         <Document file={file}>
           <Page
             className="border-2 border-red-600"
             pageNumber={1}
             width={PDF_WIDTH}
-            renderTextLayer={
-              false
-            }
-            renderAnnotationLayer={
-              false
-            }
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
             onRenderSuccess={() => {
               const canvas =
                 document.querySelector(
@@ -49,9 +39,7 @@ export default function PdfViewer({
                 ) as HTMLCanvasElement;
 
               if (canvas) {
-                setPageHeight(
-                  canvas.clientHeight
-                );
+                setPageHeight(canvas.clientHeight);
               }
             }}
           />
@@ -60,15 +48,10 @@ export default function PdfViewer({
         {pageHeight > 0 && (
           <OCRSelectionLayer
             width={PDF_WIDTH}
-            height={
-              pageHeight
-            }
-            onSelectionComplete={
-              onOCRSelection
-            }
+            height={pageHeight}
+            onSelectionComplete={onOCRSelection}
           />
         )}
-
       </div>
 
     </div>

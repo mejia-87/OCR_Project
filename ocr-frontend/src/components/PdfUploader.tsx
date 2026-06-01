@@ -2,9 +2,7 @@ type Props = {
   onFileSelect: (file: File | null) => void;
 };
 
-export default function PdfUploader({
-  onFileSelect,
-}: Props) {
+export default function PdfUploader({onFileSelect, }: Props) {
   return (
     <div className="border-2 border-dashed p-8 rounded-lg">
       <input

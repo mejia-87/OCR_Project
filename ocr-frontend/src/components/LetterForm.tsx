@@ -20,13 +20,13 @@ export default function LetterForm({
     key: keyof LetterFormType;
     label: string;
   }[] = [
-    { key: "referencia", label: "Referencia" },
-    { key: "cite", label: "Cite" },
-    { key: "sidoc", label: "SIDOC" },
-    { key: "fecha", label: "Fecha" },
-    { key: "receptor", label: "Receptor" },
-    { key: "emisor", label: "Emisor" },
-  ];
+      { key: "referencia", label: "Referencia" },
+      { key: "cite", label: "Cite" },
+      { key: "sidoc", label: "SIDOC" },
+      { key: "fecha", label: "Fecha" },
+      { key: "receptor", label: "Receptor" },
+      { key: "emisor", label: "Emisor" },
+    ];
 
   return (
     <div className="space-y-4">
@@ -47,10 +47,9 @@ export default function LetterForm({
               onChange(field.key, e.target.value)
             }
             className={`w-full border rounded-lg p-2 transition
-              ${
-                selectedField === field.key
-                  ? "border-blue-500 ring-2 ring-blue-300"
-                  : "border-gray-300"
+              ${selectedField === field.key
+                ? "border-blue-500 ring-2 ring-blue-300"
+                : "border-gray-300"
               }`}
           />
         </div>

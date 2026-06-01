@@ -22,63 +22,48 @@ export default function OcrSelectionLayer({
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0, });
 
 
-  const handleMouseDown = (
-    e: any
-  ) => {
-    const pos =
-      e.target
-        .getStage()
-        ?.getPointerPosition();
+  const handleMouseDown = (e: any) => {
+
+    const pos = e.target.getStage()?.getPointerPosition();
 
     if (!pos) return;
 
     setStartPoint(pos);
 
-    setRectangles((prev) => [
-      ...prev,
-      {
-        x: pos.x,
-        y: pos.y,
-        width: 0,
-        height: 0,
-      },
+    setRectangles((prev) => [...prev, {
+      x: pos.x,
+      y: pos.y,
+      width: 0,
+      height: 0,
+    },
     ]);
 
     setIsDrawing(true);
   };
 
-  const handleMouseMove = (
-    e: any
-  ) => {
+  const handleMouseMove = (e: any) => {
+
     if (!isDrawing) return;
 
-    const pos =
-      e.target
-        .getStage()
-        ?.getPointerPosition();
+    const pos = e.target.getStage()?.getPointerPosition();
 
     if (!pos) return;
 
     setRectangles((prev) => {
       const copy = [...prev];
-
       const index = copy.length - 1;
 
       copy[index] = {
         ...copy[index],
-        width:
-          pos.x -
-          startPoint.x,
-        height:
-          pos.y -
-          startPoint.y,
+        width: pos.x - startPoint.x,
+        height: pos.y - startPoint.y,
       };
 
       return copy;
     });
   };
 
-  const handleMouseUp = () => { 
+  const handleMouseUp = () => {
     setIsDrawing(false);
 
     const rect = rectangles[rectangles.length - 1];
@@ -86,15 +71,9 @@ export default function OcrSelectionLayer({
     if (!rect) return;
 
     const normalized = {
-      x:
-        rect.width < 0
-          ? rect.x + rect.width
-          : rect.x,
+      x: rect.width < 0 ? rect.x + rect.width : rect.x,
 
-      y:
-        rect.height < 0
-          ? rect.y + rect.height
-          : rect.y,
+      y: rect.height < 0 ? rect.y + rect.height : rect.y,
 
       width: Math.abs(rect.width),
 
@@ -109,9 +88,9 @@ export default function OcrSelectionLayer({
       className="border-2 border-blue-700"
       width={width}
       height={height}
-      onMouseDown={ handleMouseDown }
-      onMouseMove={ handleMouseMove }
-      onMouseUp={ handleMouseUp }
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
       style={{
         position: "absolute",
         top: 0,

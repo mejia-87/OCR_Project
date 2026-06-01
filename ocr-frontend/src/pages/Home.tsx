@@ -54,10 +54,8 @@ const cropCanvasArea = async (area: OCRArea): Promise<Blob> => {
     return new Promise((resolve, reject) => {
         tempCanvas.toBlob((blob) => {
             if (!blob) {
-                reject(new Error(
-                    "No se pudo generar imagen"
-                )
-                );
+                reject(new Error("No se pudo generar imagen"));
+
                 return;
             }
 
@@ -70,28 +68,19 @@ const cropCanvasArea = async (area: OCRArea): Promise<Blob> => {
 };
 
 export default function Home() {
-    const [file, setFile] =
-        useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(null);
+    const [selectedField, setSelectedField] = useState<keyof LetterFormType | null>(null);
 
-    const [selectedField, setSelectedField] =
-        useState<keyof LetterFormType | null>(
-            null
-        );
+    const [form, setForm] = useState<LetterFormType>({
+        referencia: "",
+        cite: "",
+        sidoc: "",
+        fecha: "",
+        receptor: "",
+        emisor: "",
+    });
 
-    const [form, setForm] =
-        useState<LetterFormType>({
-            referencia: "",
-            cite: "",
-            sidoc: "",
-            fecha: "",
-            receptor: "",
-            emisor: "",
-        });
-
-    const handleChange = (
-        field: keyof LetterFormType,
-        value: string
-    ) => {
+    const handleChange = (field: keyof LetterFormType, value: string) => {
         setForm((prev) => ({
             ...prev,
             [field]: value,
@@ -145,33 +134,22 @@ export default function Home() {
 
             {file && (
                 <div className="grid grid-cols-12 gap-6">
-
                     <div className="col-span-4 bg-white rounded-lg shadow p-4">
 
                         <LetterForm
                             form={form}
-                            selectedField={
-                                selectedField
-                            }
-                            setSelectedField={
-                                setSelectedField
-                            }
+                            selectedField={selectedField}
+                            setSelectedField={setSelectedField}
                             onChange={handleChange}
                         />
-
                     </div>
 
                     <div className="col-span-8 bg-white rounded-lg shadow p-4">
-
                         <PdfViewer
                             file={file}
-                            onOCRSelection={
-                                handleSelection
-                            }
+                            onOCRSelection={handleSelection}
                         />
-
                     </div>
-
                 </div>
             )}
         </div>
