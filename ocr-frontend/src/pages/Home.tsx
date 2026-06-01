@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 import PdfUploader from "../components/PdfUploader";
 import PdfViewer from "../components/PdfViewer";
@@ -6,6 +7,67 @@ import LetterForm from "../components/LetterForm";
 
 import type { LetterForm as LetterFormType } from "../types/letter";
 import type { OCRArea } from "../types/ocr";
+
+const cropCanvasArea = async (area: OCRArea): Promise<Blob> => {
+    const pdfCanvas = document.querySelector(
+        ".react-pdf__Page canvas"
+    ) as HTMLCanvasElement;
+
+    if (!pdfCanvas) {
+        throw new Error(
+            "Canvas PDF no encontrado"
+        );
+    }
+
+    const tempCanvas = document.createElement("canvas");
+
+    tempCanvas.width = Math.abs(area.width);
+    tempCanvas.height = Math.abs(area.height);
+
+    const ctx = tempCanvas.getContext("2d");
+
+    if (!ctx) {
+        throw new Error(
+            "No se pudo obtener contexto"
+        );
+    }
+
+    const scaleX = pdfCanvas.width / pdfCanvas.clientWidth;
+    const scaleY = pdfCanvas.height / pdfCanvas.clientHeight;
+    const realX = area.x * scaleX;
+    const realY = area.y * scaleY;
+    const realWidth = area.width * scaleX;
+    const realHeight = area.height * scaleY;
+
+    ctx.drawImage(
+        pdfCanvas,
+        realX,
+        realY,
+        realWidth,
+        realHeight,
+        0,
+        0,
+        realWidth,
+        realHeight
+    );
+
+    return new Promise((resolve, reject) => {
+        tempCanvas.toBlob((blob) => {
+            if (!blob) {
+                reject(new Error(
+                    "No se pudo generar imagen"
+                )
+                );
+                return;
+            }
+
+            resolve(blob);
+        },
+            "image/png"
+        );
+    }
+    );
+};
 
 export default function Home() {
     const [file, setFile] =
@@ -36,56 +98,37 @@ export default function Home() {
         }));
     };
 
-    const handleOCRResult = (
-        text: string
-    ) => {
-        if (!selectedField) {
-            alert(
-                "Seleccione primero un campo del formulario"
-            );
-            return;
-        }
-
-        setForm((prev) => ({
-            ...prev,
-            [selectedField]: text,
-        }));
-    };
 
     const handleSelection = async (area: OCRArea) => {
-        if (!selectedField) {
-            alert("Seleccione un campo primero");
-            return;
-        }
-
-        if (!file) {
-            alert("No existe PDF");
-            return;
-        }
-
-        const formData = new FormData();
-
-        formData.append("pdf", file);
-        formData.append("x", area.x.toString());
-        formData.append("y", area.y.toString());
-        formData.append("width", area.width.toString());
-        formData.append("height", area.height.toString());
-
         try {
-            const response = await fetch(
-                "http://localhost:3000/api/ocr/extract",
-                {
-                    method: "POST",
-                    body: formData,
-                }
+            if (!selectedField) {
+                alert(
+                    "Seleccione un campo"
+                );
+                return;
+            }
+
+            const imageBlob = await cropCanvasArea(area);
+            const url = URL.createObjectURL(imageBlob);
+            window.open(url);
+
+            const formData = new FormData();
+
+            formData.append(
+                "image",
+                imageBlob,
+                "selection.png"
             );
 
-            const data = await response.json();
+            const response = await axios.post("http://localhost:3000/api/ocr/extract", formData);
+
+            const text = response.data.text;
 
             setForm((prev) => ({
                 ...prev,
-                [selectedField]: data.text,
+                [selectedField]: text,
             }));
+
         } catch (error) {
             console.error(error);
         }

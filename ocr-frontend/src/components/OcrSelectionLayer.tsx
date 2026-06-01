@@ -15,17 +15,12 @@ export default function OcrSelectionLayer({
   height,
   onSelectionComplete,
 }: Props) {
-  const [isDrawing, setIsDrawing] =
-    useState(false);
+  const [isDrawing, setIsDrawing] = useState(false);
 
-  const [rectangles, setRectangles] =
-    useState<OCRArea[]>([]);
+  const [rectangles, setRectangles] = useState<OCRArea[]>([]);
 
-  const [startPoint, setStartPoint] =
-    useState({
-      x: 0,
-      y: 0,
-    });
+  const [startPoint, setStartPoint] = useState({ x: 0, y: 0, });
+
 
   const handleMouseDown = (
     e: any
@@ -67,8 +62,7 @@ export default function OcrSelectionLayer({
     setRectangles((prev) => {
       const copy = [...prev];
 
-      const index =
-        copy.length - 1;
+      const index = copy.length - 1;
 
       copy[index] = {
         ...copy[index],
@@ -84,30 +78,40 @@ export default function OcrSelectionLayer({
     });
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = () => { 
     setIsDrawing(false);
 
-    const rect =
-      rectangles[
-        rectangles.length - 1
-      ];
+    const rect = rectangles[rectangles.length - 1];
 
     if (!rect) return;
 
-    onSelectionComplete(rect);
+    const normalized = {
+      x:
+        rect.width < 0
+          ? rect.x + rect.width
+          : rect.x,
+
+      y:
+        rect.height < 0
+          ? rect.y + rect.height
+          : rect.y,
+
+      width: Math.abs(rect.width),
+
+      height: Math.abs(rect.height),
+    };
+
+    onSelectionComplete(normalized);
   };
 
   return (
     <Stage
+      className="border-2 border-blue-700"
       width={width}
       height={height}
-      onMouseDown={
-        handleMouseDown
-      }
-      onMouseMove={
-        handleMouseMove
-      }
-      onMouseUp={handleMouseUp}
+      onMouseDown={ handleMouseDown }
+      onMouseMove={ handleMouseMove }
+      onMouseUp={ handleMouseUp }
       style={{
         position: "absolute",
         top: 0,
