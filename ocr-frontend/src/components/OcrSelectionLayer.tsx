@@ -17,7 +17,7 @@ export default function OcrSelectionLayer({
 }: Props) {
   const [isDrawing, setIsDrawing] = useState(false);
 
-  const [rectangles, setRectangles] = useState<OCRArea[]>([]);
+  const [rectangle, setRectangle] = useState<OCRArea | null>(null);
 
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0, });
 
@@ -30,13 +30,12 @@ export default function OcrSelectionLayer({
 
     setStartPoint(pos);
 
-    setRectangles((prev) => [...prev, {
+    setRectangle({
       x: pos.x,
       y: pos.y,
       width: 0,
       height: 0,
-    },
-    ]);
+    });
 
     setIsDrawing(true);
   };
@@ -49,24 +48,22 @@ export default function OcrSelectionLayer({
 
     if (!pos) return;
 
-    setRectangles((prev) => {
-      const copy = [...prev];
-      const index = copy.length - 1;
+    setRectangle((prev) => {
+      if (!prev) return null;
 
-      copy[index] = {
-        ...copy[index],
+      return {
+        ...prev,
         width: pos.x - startPoint.x,
         height: pos.y - startPoint.y,
       };
 
-      return copy;
     });
   };
 
   const handleMouseUp = () => {
     setIsDrawing(false);
 
-    const rect = rectangles[rectangles.length - 1];
+    const rect = rectangle;
 
     if (!rect) return;
 
@@ -98,18 +95,15 @@ export default function OcrSelectionLayer({
       }}
     >
       <Layer>
-        {rectangles.map(
-          (rect, index) => (
-            <Rect
-              key={index}
-              x={rect.x}
-              y={rect.y}
-              width={rect.width}
-              height={rect.height}
-              stroke="red"
-              strokeWidth={2}
-            />
-          )
+        {rectangle && (
+          <Rect
+            x={rectangle.x}
+            y={rectangle.y}
+            width={rectangle.width}
+            height={rectangle.height}
+            stroke="red"
+            strokeWidth={2}
+          />
         )}
       </Layer>
     </Stage>
