@@ -8,6 +8,7 @@ type Props = {
     field: keyof LetterFormType,
     value: string
   ) => void;
+  saveLetter: () => void;
 };
 
 export default function LetterForm({
@@ -15,6 +16,7 @@ export default function LetterForm({
   selectedField,
   setSelectedField,
   onChange,
+  saveLetter,
 }: Props) {
   const fields: {
     key: keyof LetterFormType;
@@ -54,6 +56,12 @@ export default function LetterForm({
           />
         </div>
       ))}
+      <button
+        onClick={saveLetter}
+        className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+      >
+        Guardar Carta
+      </button>
     </div>
   );
 }

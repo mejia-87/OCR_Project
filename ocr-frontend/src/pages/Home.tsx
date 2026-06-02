@@ -123,6 +123,20 @@ export default function Home() {
         }
     };
 
+    const saveLetter = async () => {
+        try {
+            await axios.post("http://localhost:3000/api/letters/create", form);
+            alert(
+                "Carta guardada Correctamente"
+            );
+        } catch (error) {
+            console.error(error);
+            alert(
+                "Error al guardar la carta"
+            );
+        }
+    }
+
     return (
         <div className="min-h-screen p-6 bg-slate-50">
 
@@ -141,6 +155,7 @@ export default function Home() {
                             selectedField={selectedField}
                             setSelectedField={setSelectedField}
                             onChange={handleChange}
+                            saveLetter = {saveLetter}
                         />
                     </div>
 
