@@ -82,7 +82,7 @@ export default function OcrSelectionLayer({
 
   return (
     <Stage
-      className="border-2 border-blue-700"
+      className="border-2"
       width={width}
       height={height}
       onMouseDown={handleMouseDown}
@@ -101,8 +101,9 @@ export default function OcrSelectionLayer({
             y={rectangle.y}
             width={rectangle.width}
             height={rectangle.height}
-            stroke="red"
+            stroke="green"
             strokeWidth={2}
+            fill= "rgba(0, 255, 0, 0.3)"
           />
         )}
       </Layer>

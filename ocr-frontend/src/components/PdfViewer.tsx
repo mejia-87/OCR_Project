@@ -19,7 +19,7 @@ export default function PdfViewer({ file, onOCRSelection, }: Props) {
   const pdfContainerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex justify-center">
+    <div>
       <div
         className="relative"
         ref={pdfContainerRef}
@@ -27,7 +27,6 @@ export default function PdfViewer({ file, onOCRSelection, }: Props) {
       >
         <Document file={file}>
           <Page
-            className="border-2 border-red-600"
             pageNumber={1}
             width={PDF_WIDTH}
             renderTextLayer={false}

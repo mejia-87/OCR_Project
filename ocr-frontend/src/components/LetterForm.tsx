@@ -24,7 +24,7 @@ export default function LetterForm({
   }[] = [
       { key: "referencia", label: "Referencia" },
       { key: "cite", label: "Cite" },
-      { key: "sidoc", label: "SIDOC" },
+      { key: "sidoc", label: "Sidoc" },
       { key: "fecha", label: "Fecha" },
       { key: "receptor", label: "Receptor" },
       { key: "emisor", label: "Emisor" },
@@ -32,13 +32,9 @@ export default function LetterForm({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold">
-        Registro de Carta
-      </h2>
-
       {fields.map((field) => (
         <div key={field.key}>
-          <label className="block mb-1 text-sm font-medium">
+          <label className="block mb-1 text-lg font-bold text-blue-950">
             {field.label}
           </label>
 
@@ -56,12 +52,16 @@ export default function LetterForm({
           />
         </div>
       ))}
-      <button
-        onClick={saveLetter}
-        className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-      >
-        Guardar Carta
-      </button>
+
+      <div className="text-center">
+        <button
+          onClick={saveLetter}
+          className="mt-10 px-10 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-600 transition"
+        >
+          Guardar
+        </button>
+      </div>
+
     </div>
   );
 }
